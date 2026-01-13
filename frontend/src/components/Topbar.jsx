@@ -9,7 +9,7 @@ export default function Topbar({showSidebar=true, onToggleSidebar=()=>{}}){
         </button>
       </div>
       <div style={{display:'flex',alignItems:'center',gap:12}}>
-        {showSidebar && <div style={{fontWeight:700}}>QAPilot</div>}
+        <div style={{fontWeight:700}}>QAPilot</div>
       </div>
       <div style={{flex:1}} />
     </div>
