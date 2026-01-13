@@ -7,7 +7,8 @@
   --text:#e6eef8;
 }
 html,body,#root{height:100%;}
-body{margin:0;font-family:Inter,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text)}
+.app-shell, body{background:#0b1822!important;}
+body{margin:0;font-family:Inter,Segoe UI,Roboto,Arial;color:var(--text)}
 .app-shell{display:flex;height:100vh}
 .sidebar{width:260px;background:#0b1822;padding:12px;border-right:1px solid #081018}
 .sidebar .brand{font-weight:700;margin-bottom:12px}
