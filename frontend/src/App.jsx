@@ -79,7 +79,7 @@ export default function App(){
           top: 16,
           left: 16,
           zIndex: 2000,
-          background: '#101c2a',
+          background: '#0b1822', // matches sidebar background
           borderRadius: '12px',
           boxShadow: '0 2px 8px #0002',
           width: 44,
