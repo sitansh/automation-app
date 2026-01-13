@@ -28,7 +28,7 @@ from .report_visuals import generate_report_visuals
 
 LOG = logging.getLogger(__name__)
 
-app = FastAPI(title="Req vs Schema Comparator")
+app = FastAPI(title="QAPilot")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
