@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+
 import UploadForm from './components/UploadForm'
 import Results from './components/Results'
 import Sidebar from './components/Sidebar'
@@ -6,6 +7,7 @@ import Topbar from './components/Topbar'
 import SummaryModal from './components/SummaryModal'
 import Reports from './components/Reports'
 import { ToastContainer } from 'react-toastify'
+import icon from '/favicon.png'
 
 export default function App(){
   const [data, setData] = useState(null)
@@ -70,8 +72,32 @@ export default function App(){
 
   return (
     <div className="app-shell">
+      {/* Floating icon button, always visible */}
+      <div
+        style={{
+          position: 'fixed',
+          top: 16,
+          left: 16,
+          zIndex: 1001,
+          background: '#101c2a',
+          borderRadius: '12px',
+          boxShadow: '0 2px 8px #0002',
+          width: 44,
+          height: 44,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          border: showSidebar ? '2px solid #1a2a3a' : '2px solid #2a3a4a',
+          transition: 'border 0.2s',
+        }}
+        onClick={() => setShowSidebar(s => !s)}
+        title={showSidebar ? 'Hide sidebar' : 'Show sidebar'}
+      >
+        <img src={icon} alt="App Icon" style={{width: 28, height: 28, pointerEvents: 'none'}} />
+      </div>
       {showSidebar && (
-          <div className="sidebar" style={{width: sidebarWidth}}>
+        <div className="sidebar" style={{width: sidebarWidth}}>
           <Sidebar currentView={view} onSelectView={setView} showSummary={showSummary} onToggleSummary={()=>setShowSummaryModal(true)} summaryData={data} />
           <div className="resizer" onMouseDown={startResize} onTouchStart={startResize} />
         </div>
