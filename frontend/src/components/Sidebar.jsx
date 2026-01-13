@@ -1,15 +1,10 @@
 import React from 'react'
 
-import icon from '/favicon.png'
-
 export default function Sidebar({showSummary = false, onToggleSummary = () => {}, summaryData = null, currentView = 'comparator', onSelectView = () => {}}){
   const counts = summaryData?.counts
   const report = summaryData?.report
   return (
     <div>
-      <div style={{display:'flex',justifyContent:'center',alignItems:'center',margin:'24px 0 16px 0'}}>
-        <img src={icon} alt="App Icon" style={{width:48,height:48,borderRadius:12,boxShadow:'0 2px 8px #0002'}} />
-      </div>
       <div className="brand" aria-hidden="true" style={{height:0,overflow:'hidden'}}></div>
       <div className="menu">
         <button className={"btn " + (currentView === 'comparator' ? 'active' : '')} onClick={()=>onSelectView('comparator')}>Comparator</button>
