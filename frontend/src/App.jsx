@@ -78,7 +78,7 @@ export default function App(){
           position: 'fixed',
           top: 16,
           left: 16,
-          zIndex: 1001,
+          zIndex: 2000,
           background: '#101c2a',
           borderRadius: '12px',
           boxShadow: '0 2px 8px #0002',
@@ -90,6 +90,7 @@ export default function App(){
           cursor: 'pointer',
           border: showSidebar ? '2px solid #1a2a3a' : '2px solid #2a3a4a',
           transition: 'border 0.2s',
+          pointerEvents: 'auto',
         }}
         onClick={() => setShowSidebar(s => !s)}
         title={showSidebar ? 'Hide sidebar' : 'Show sidebar'}
@@ -97,7 +98,7 @@ export default function App(){
         <img src={icon} alt="App Icon" style={{width: 28, height: 28, pointerEvents: 'none'}} />
       </div>
       {showSidebar && (
-        <div className="sidebar" style={{width: sidebarWidth}}>
+        <div className="sidebar" style={{width: sidebarWidth, marginTop: 60}}>
           <Sidebar currentView={view} onSelectView={setView} showSummary={showSummary} onToggleSummary={()=>setShowSummaryModal(true)} summaryData={data} />
           <div className="resizer" onMouseDown={startResize} onTouchStart={startResize} />
         </div>
