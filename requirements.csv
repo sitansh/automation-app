@@ -1,0 +1,29 @@
+req_id,field_key,type,required,label,min_len,max_len,regex,options
+1,firstName,text,True,First Name,1,100,,
+2,lastName,text,True,Last Name,1,100,,
+3,email,email,True,Email Address,5,255,^[^@]+@[^@]+\.[^@]+$,
+4,phone,phone,False,Phone Number,0,20,,
+5,country,select,True,Country,,, ,"United States;Canada;Mexico"
+req_id,field_key,type,required
+R1,firstName,text,true
+R2,lastName,text,true
+R3,email,email,true
+R4,phone,phone,true
+R5,country,dropdown,true
+R6,state,dropdown,false
+R7,city,text,false
+R8,zipCode,text,false
+R9,dateOfBirth,date,false
+R10,gender,dropdown,false
+R11,resume,file,true
+R12,coverLetter,textarea,false
+R13,linkedinUrl,url,false
+R14,githubUrl,url,false
+R15,expectedSalary,number,false
+R16,noticePeriod,dropdown,false
+R17,workAuthorization,dropdown,true
+R18,relocate,checkbox,false
+R19,experienceYears,number,true
+R20,randomFieldWhichDoesNotExist,text,true
+R21,email,text,true
+R22,phone,text,true

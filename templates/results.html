@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Comparison Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <style>
+      body { background: #f7f9fb; }
+      .container { max-width: 1200px; }
+      .badge-status { font-weight:600; }
+      .diff-cell { max-width: 240px; white-space: pre-wrap; word-break: break-word; }
+    </style>
+  </head>
+  <body>
+    {% extends 'base.html' %}
+    {% block title %}Results - Req vs Schema{% endblock %}
+    {% block content %}
+    <div class="row">
+      <div class="col-xl-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Summary</h5>
+            <div class="mb-2"><strong>MATCHED:</strong> {{ counts.MATCHED }}</div>
+            <div class="mb-2"><strong>MISMATCH:</strong> {{ counts.MISMATCH }}</div>
+            <div class="mb-2"><strong>MISSING:</strong> {{ counts.MISSING }}</div>
+            <div class="mb-2"><strong>POSSIBLE_MATCH:</strong> {{ counts.POSSIBLE_MATCH }}</div>
+            <div class="mt-3">
+              <a class="btn btn-outline-primary" href="/">New Comparison</a>
+              <a class="btn btn-success ms-2" href="/download?path={{ report_path }}">Download</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-9">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Details</h5>
+            <div class="table-responsive">
+              <table id="results" class="table table-hover table-vcenter">
+                <thead>
+                  <tr>
+                    <th>req_id</th>
+                    <th>field_key</th>
+                    <th>expected_type</th>
+                    <th>actual_type</th>
+                    <th>expected_required</th>
+                    <th>actual_required</th>
+                    <th>status</th>
+                    <th>differences</th>
+                    <th>best_match</th>
+                    <th>score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for r in rows %}
+                  <tr>
+                    <td>{{ r.req_id }}</td>
+                    <td>{{ r.field_key }}</td>
+                    <td>{{ r.expected_type }}</td>
+                    <td>{{ r.actual_type }}</td>
+                    <td>{{ r.expected_required }}</td>
+                    <td>{{ r.actual_required }}</td>
+                    <td>
+                      {% if r.status == 'MATCHED' %}
+                        <span class="badge bg-success">MATCHED</span>
+                      {% elif r.status == 'MISMATCH' %}
+                        <span class="badge bg-danger">MISMATCH</span>
+                      {% elif r.status == 'MISSING' %}
+                        <span class="badge bg-muted">MISSING</span>
+                      {% elif r.status == 'POSSIBLE_MATCH' %}
+                        <span class="badge bg-warning">POSSIBLE</span>
+                      {% else %}
+                        <span class="badge bg-light text-dark">{{ r.status }}</span>
+                      {% endif %}
+                    </td>
+                    <td class="diff-cell">{{ r.differences }}</td>
+                    <td>{{ r.best_match_key or '' }}</td>
+                    <td>{{ r.best_match_score or '' }}</td>
+                    <td>
+                      {% if r.raw_snippet %}
+                      <button class="btn btn-sm btn-outline-secondary show-raw" data-snippet='{{ r.raw_snippet|e }}'>View Schema</button>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
+
+    {% block scripts %}
+    <script>
+      $(document).ready(function(){
+        $('#results').DataTable({ pageLength: 25, order: [[0, 'asc']] });
+
+        $('#results tbody').on('click', 'tr', function(){
+          const rawpath = $(this).data('rawpath');
+          if(rawpath){
+            alert('Raw JSON path: ' + rawpath);
+          }
+        });
+      });
+    </script>
+    {% endblock %}

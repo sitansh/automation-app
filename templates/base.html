@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Req vs Schema Comparator{% endblock %}</title>
+    <link href="https://unpkg.com/@tabler/core@2.26.0/dist/css/tabler.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <style>
+      .content { padding: 24px; }
+      .diff-cell { max-width: 300px; white-space: pre-wrap; word-break: break-word; }
+    </style>
+    {% block head %}{% endblock %}
+  </head>
+  <body class="layout-navbar-fixed">
+    <header class="navbar navbar-expand-md navbar-light bg-white border-bottom">
+      <div class="container-xl">
+        <a class="navbar-brand" href="/">Req vs Schema</a>
+        <div class="ms-auto">
+          <a href="/reports" class="btn btn-link">Reports</a>
+        </div>
+      </div>
+    </header>
+    <div class="content container-xl">
+      {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/@tabler/core@2.26.0/dist/js/tabler.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <!-- Raw modal -->
+    <div class="modal modal-blur fade" id="rawModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Schema Snippet</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <pre id="rawContent" style="max-height:60vh; overflow:auto; background:#0f1720; color:#e6eef8; padding:1rem; border-radius:6px;">{}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Req vs Schema Comparator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <style>
+      body { background: #f7f9fb; }
+      .hero { max-width: 920px; margin: 2rem auto; }
+      .example { font-size: 0.9rem; color: #666; }
+    </style>
+  </head>
+  <body>
+    {% extends 'base.html' %}
+    {% block title %}Compare Requirements{% endblock %}
+    {% block content %}
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title">Compare Requirements</h3>
+            <p class="text-muted">Upload your requirements file (CSV or XLSX) and provide the schema JSON URL. The tool compares expected fields against implemented fields and generates a downloadable report.</p>
+            {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+            {% endif %}
+
+            <form action="/compare" method="post" enctype="multipart/form-data" id="compareForm">
+              <div class="mb-3">
+                <label class="form-label">Requirements file</label>
+                <div id="drop-area" class="border rounded p-3 text-center">
+                  <p class="mb-2">Drag & drop file here</p>
+                  <div class="d-flex justify-content-center gap-2">
+                    <button type="button" id="browseBtn" class="btn btn-sm btn-outline-primary">Browse</button>
+                    <div id="fileName" class="small text-muted align-self-center">Supported: .csv, .xls, .xlsx</div>
+                  </div>
+                  <input type="file" name="file" id="fileInput" required style="display:none;">
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Schema JSON URL</label>
+                <input class="form-control" type="url" name="schema_url" placeholder="https://.../form_schema.json" required>
+              </div>
+              <div class="d-flex justify-content-end">
+                <button class="btn btn-primary" type="submit">Compare</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Tips</h5>
+            <ul>
+              <li>Supported file types: CSV, XLSX</li>
+              <li>Use CDN schema JSON URL for your app</li>
+              <li>Reports are saved and can be downloaded from the Reports page</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
+
+{% block scripts %}
+<script>
+  (function(){
+  const drop = document.getElementById('drop-area');
+  const input = document.getElementById('fileInput');
+  const browse = document.getElementById('browseBtn');
+  // browse button opens file dialog
+  browse.addEventListener('click', () => input.click());
+    ['dragenter','dragover','dragleave','drop'].forEach(evt => drop.addEventListener(evt, preventDefaults, false));
+    function preventDefaults(e){ e.preventDefault(); e.stopPropagation(); }
+    drop.addEventListener('drop', handleDrop, false);
+    function handleDrop(e){
+      const dt = e.dataTransfer; const files = dt.files;
+      if(files && files.length){
+        // Use DataTransfer to set files on the input (works across browsers)
+        try{
+          const dataTransfer = new DataTransfer();
+          for(let i=0;i<files.length;i++) dataTransfer.items.add(files[i]);
+          input.files = dataTransfer.files;
+        }catch(err){
+          // fallback
+          input.files = files;
+        }
+        document.getElementById('fileName').textContent = files[0].name + ' (' + Math.round(files[0].size/1024) + ' KB)';
+      }
+    }
+    // show filename when user selects via dialog
+    input.addEventListener('change', function(){
+      if(this.files && this.files[0]){
+        const f = this.files[0];
+        document.getElementById('fileName').textContent = f.name + ' (' + Math.round(f.size/1024) + ' KB)';
+      }
+    });
+
+    // client-side validation
+    document.getElementById('compareForm').addEventListener('submit', function(e){
+      const f = input.files[0];
+      if(!f){ e.preventDefault(); alert('Please select a requirements file'); return; }
+      const allowed = ['csv','xls','xlsx'];
+      const ext = f.name.split('.').pop().toLowerCase();
+      if(allowed.indexOf(ext) === -1){ e.preventDefault(); alert('Unsupported file type. Allowed: csv,xls,xlsx'); }
+    });
+  })();
+</script>
+{% endblock %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+  </body>
+</html>

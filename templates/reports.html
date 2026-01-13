@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Reports - Req vs Schema{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Saved Reports</h3>
+        <div id="reportsArea">
+          <table class="table" id="reportsTable">
+            <thead>
+              <tr><th>Filename</th><th>Size</th><th>Modified</th><th>Actions</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function loadReports(){
+  const res = await fetch('/reports');
+  const data = await res.json();
+  const tbody = document.querySelector('#reportsTable tbody'); tbody.innerHTML='';
+  data.forEach(r=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${r.name}</td><td>${(r.size/1024).toFixed(1)} KB</td><td>${r.modified}</td><td><a class="btn btn-sm btn-primary" href="/download?path=${encodeURIComponent(r.path)}">Download</a> <button class="btn btn-sm btn-danger ms-2" data-path="${r.path}">Delete</button></td>`;
+    tbody.appendChild(tr);
+  });
+  document.querySelectorAll('#reportsTable button').forEach(btn=> btn.addEventListener('click', async (e)=>{
+    const path = e.currentTarget.getAttribute('data-path');
+    if(!confirm('Delete '+path+'?')) return;
+    const form = new FormData(); form.append('path', path);
+    const resp = await fetch('/reports/delete', { method:'POST', body: form });
+    const j = await resp.json();
+    if(j.ok){ loadReports(); } else { alert('Delete failed: '+(j.error||'unknown')); }
+  }));
+}
+loadReports();
+</script>
+{% endblock %}
